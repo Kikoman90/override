@@ -1,0 +1,46 @@
+solution level01:
+
+-> we use gdb to inspect the stack and the code
+
+-> main pushes 2 registers on the stack, and then add 96 bytes
+
+-> there is a buffer of 64 bytes at [esp+0x1c] (+28) and an int at [esp+0x5c] (+92)
+
+-> with a call to fgets, the program asks the user to provide a username on the stdin
+
+-> the function "verify_user_name" returns -1, 0, or 1 if the username we provided is respectively inferior, equal or superior to the string "dat_wil". The return value is stored in the integer
+
+-> next the program asks the user for a password. The call to fgets fills the 64 bytes buffer with input from stdin. The 'size' parameter of fgets is set to 0x64 = 100 bytes so it is possible to overflow our buffer !!
+
+-> the function "verify_user_pass" compares the password we provide with the string "admin", and the return value (-1, 0 or 1) is stored in the integer
+
+-> however the program will display "nope, incorrect password...\n" whether or not the password is "admin" :)
+
+-> inside gdb, this is the state of the stack of main:
+
+esp is 0xffffd660 :
+	-saved eip
+	-saved ebp (4 bytes at address 0xffffd6c8)
+	-pushed edi and ebx (4 + 4 = 8 bytes)
+	-integer (4 bytes at address 0xffffd6bc)
+	-buffer (64 bytes starting at address 0xffffd67c)
+	-28 bytes
+
+thus if we write at the 80th byte of our buffer, we will be overwriting the saved return address (eip)
+64 + 4 (integer) + 8 (pushed registers) + 4 (ebp) = 80
+
+-> we need to be aware that since the call to verify_user_pass is made after we fill our buffer with fgets, we should place the shellcode in the first 64 bytes of our buffer to keep the shellcode from being invalidated when the return value of verify_user_pass is stored in the integer
+
+Warning: we remember from the previous project that the addresses we see in gdb will surely be different outside of gdb since the stack is bigger in gdb (arguments and environment tend to be bigger in gdb). Hence the need of using a NOP-sled (https://en.wikipedia.org/wiki/NOP_slide)
+
+-> our payload will be composed of a shellcode of 21 bytes preceded by a NOP-sled of 64-21=43 NOPs, followed by 16 arbitrary characters (to reach buff[80]), followed by an address pointing to our shellcode (calculated below)
+
+-> we want to overwrite the return address of main (saved eip) so that the shellcode is executed. Therefore the address we chose is:
+        buffer address + 21 (~ middle of NOP-sled) + 48 (gdb diff)
+	0xffffd67c + 0x45 = 0xffffd6c1
+
+gdb diff is the difference between stack addresses inside gdb and outside gdb (found with a few tests)
+
+> (python -c "print('dat_wil')"; python -c "print('\x90' * 43 + '\x31\xc9\xf7\xe1\xb0\x0b\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xcd\x80' + '*' * 16 + '\xc1\xd6\xff\xff')"; cat -) | ./level01
+> cat /home/users/level02/.pass
+PwBLgNa8p8MTKW57S7zxVAQCxnCpV8JqTTs9XEBv
