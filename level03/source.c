@@ -1,6 +1,24 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+
+void	decrypt(int diff)
+{
+	char	str[] = "Q}|u`sfg~sf{}|a3";
+	size_t	len_str = strlen(str);
+	int	i = 0;
+
+	while (i < len_str)
+	{
+		str[i] = (int)str[i] ^ diff;
+		i++;
+	}
+	if (strncmp(str, "Congratulations!", 17) == 0)
+		system("/bin/sh");
+	else
+		puts("\nInvalid Password");
+}
 
 void	test(int i, int c)
 {

@@ -1,0 +1,33 @@
+solution level03:
+
+-> the program asks for user input : it fetches an integer with a call to scanf
+
+-> the function "test" is then called, taking two parameters : our integer, and the constant '0x1337d00d'
+
+-> "test" computes the difference between the 2 integers, and calls the function "decrypt" which takes an integer as parameter
+if the difference is between 1 and 9, or between 16 and 21, "decrypt" is called with that difference as parameter
+otherwise the parameter is a random number
+
+-> "decrypt" declares the string "Q}|u`sfg~sf{}|a3" which we'll call "str"
+
+-> for every character of "str", a xor operation is performed with the parameter/difference
+
+-> finally if "str" is equal to "Congratulations!", a shell is open with the system method
+
+-> we can find out what the integer of the xor operation should be :
+(we want 'Q' to become 'C')
+
+	'Q' = 0x51 = 01010001b
+	'C' = 0x43 = 01000011b
+
+	0101 0001  
+      ^ 0001 0010 (= 0x12 = 18)
+	0100 0011 
+
+our difference should be 18, so the integer we provide to the program in the main is :
+	0x1337d00d - 0x12 = 322424827
+
+> ./level03
+> Password:322424827
+> cat /home/users/level04/.pass
+kgv3tkEb9h2mLkRsPkXRfc2mHbjMxQzvb2FrgKkf

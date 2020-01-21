@@ -6,7 +6,7 @@ solution level01:
 
 -> there is a buffer of 64 bytes at [esp+0x1c] (+28) and an int at [esp+0x5c] (+92)
 
--> with a call to fgets, the program asks the user to provide a username on the stdin
+-> the program asks the user to provide a username on the standard input. It gets it with a call to fgets
 
 -> the function "verify_user_name" returns -1, 0, or 1 if the username we provided is respectively inferior, equal or superior to the string "dat_wil". The return value is stored in the integer
 
