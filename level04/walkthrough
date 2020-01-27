@@ -1,0 +1,24 @@
+solution level04:
+
+-> we have a program composed of main which forks the process and does the following:
+- if process is the child :
+	- prctl (not really relevant to the resolution) -> on parent deathsignal, send SIGHUP signal to child
+	- set the process as traceable by its parent
+	- gets(buff) -> there is a 128 byte buffer on the stack
+- if process is the parent :
+	- trace the system calls of the parent, execute them as long as no execve call is made (and return if the child process is terminated)
+	- in case a call to execve was made, terminate all processes (belonging to same GID)
+
+
+=> we can inject some shellcode in our buffer, and of course overflow the return address (saved eip)
+=> however we can not use execve (to spawn a terminal) since big daddy spies on us and prevents us from executing our program, word out
+=> we decide we won't summon a terminal, but just rely on our system calls to read the password and write it down
+=> the shellcode will :
+- open the .pass file of user level05, read and write it
+- be placed in an environment variable
+
+=> with gdb, we can see the address of our new environment variable : 0xffffd84b
+=> we add about 16 bytes to that address (gdb diff) and half the length of our NOP-sled (5 bytes) : 0xffffd8
+
+> python -c 'print "A" * 156 + "\x60\xd8\xff\xff"' | ./level04
+3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN
