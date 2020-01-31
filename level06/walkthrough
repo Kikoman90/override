@@ -1,0 +1,26 @@
+solution level06:
+
+-> the program asks for a login (string) and a serial number
+
+-> the program makes a call to function "auth" with the login and the serial as parameters
+
+-> "auth" checks that our login is greater than 5 characters, and that the program is not being traced (by gdb for example)
+it returns 1 if those conditions are not true
+
+-> an integer is then computed with various operations (xor, arithmetic shifts, division, multiplication...), by iterating over the characters of our login. The characters of our login must not be inferior to 32, or "auth" returns 1
+
+-> once computed the integer is compared to our serial, and "auth" returns 0 if they are equal
+
+-> main will open a new shell if "auth" returns 0, so we can get the flag
+
+=> we simply test the login "aaaaaa" and see what the computed integer is equal to. We can do that with gdb, but for that we have to set some breakpoints and skip the ptrace condition in "auth"
+=> we see that the integer is equal to 6231562 when the login is "aaaaaa", so we set the serial to 6231562
+
+> ./level06
+(...)
+-> Enter Login: aaaaaa
+(...)
+-> Enter Serial: 6231562
+Authenticated!
+$ cat /home/users/level07/.pass
+GbcPDRgsFK77LNnnuh7QyFYA2942Gp8yKj9KrWD8
