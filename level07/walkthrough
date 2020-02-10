@@ -1,0 +1,24 @@
+solution level07:
+
+-> the program is a "number storage device" which allows three operations from the user: "store", "read", and "quit"
+
+-> the main first sets the environment and the program arguments to 0 by iterating over pointers envp and argv. This in effect prevents us from storing a shellcode in the environment or arguments.
+
+-> the main allocates on the stack an array of 100 integers
+
+-> the main reads from stdin:
+* if the user command is "store", it calls the function store_number
+* if the user command is "read", it calls the function read_number
+* if the user command is "quit", the program returns normally
+
+-> the read_number function simply displays the number in the array at the index provided by the user
+
+-> the store_number function asks for 2 numbers: the number the user wants to store, and the index at which he wants to store it
+-> there are 2 conditions that we need to pass to write the number we want in the array
+-> if we pass the condtions, the program writes the number by simply indexing into the array, which means we could technically overflow the array with an index bigger than 100
+
+-> the return address of the main is at 0xffffd6fc and the address of our int buffer is 0xffffd534:
+0xffffd6fc - 0xffffd534 = 0x1c8 = 456 in decimal
+456 / 4 = 114 so we need to write at buffer[114] to overwrite the saved eip of main
+
+-> 
