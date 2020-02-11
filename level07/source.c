@@ -5,11 +5,8 @@ void		clear_stdin(void)
 {
 	unsigned char c = 0;
 
-	while (c != (unsigned char)EOF)
-	{
-		if ((c = (unsigned char)getchar()) == '\n')
-			return ;
-	}
+	while (c != '\n' && c != (unsigned char)EOF)
+		c = (unsigned char)getchar();
 }
 
 unsigned int	get_unum(void)
