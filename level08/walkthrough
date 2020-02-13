@@ -1,10 +1,19 @@
 solution level08:
 
--> the program takes one filename as parameter, 
+-> the program takes one filename as parameter
 
+-> a log file is opened in write-mode, then the program tries to open the file with the filename we provided as argument for reading
 
+-> next, the filename is appended to the "./backups/" string and a call to open is made with the resulting string as first parameter, and O_EXCL | O_CREAT | O_WRONLY as second parameter
 
+-> if the call to open succeeded, the file that we opened in read mode is copied into the backup file located in the backups folder
 
+-> the program has the setuid bit enabled so we can open and read the .pass file in the /home/users/level09 directory but if we set argv[1] to "/home/users/level09/.pass", the call to open with O_CREAT will fail because open will not create the entire directory hierarchy
+
+-> therefore we use a symbolic link / soft link to the .pass file so that the backup file can be created without hassle
+
+> pwd
+/home/users/level08
 > chmod 777 .
 > ln -s /home/users/level09/.pass pass
 > ./level08 pass

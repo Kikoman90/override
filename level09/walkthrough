@@ -1,0 +1,28 @@
+solution level09:
+
+struct		msn {
+	char	msg[140];
+	char	usn[40];
+	int	msg_len;
+};
+
+-> the program asks the user to type a username and a message
+
+-> in the function "handle_msg", 192 bytes are allocated on the stack to hold the message buffer "msg" (140 bytes) followed by the username buffer "usn" (40 bytes), followed by an integer (4 bytes) equal to 140, the length of the message buffer
+
+-> once the initialization of our struct is done, "handle_msg" calls set_username and then set_msg with the struct as parameter
+
+-> in "set_username", a buffer of 128 bytes is used to get the username, and then it is copied into our 40-byte buffer "usn"
+->  we notice that the copy is perform in a loop which ends if we reach the end of the 128-byte buffer or if the index is greater than 40 : this means that we can write into usn[40], essentially overwriting the first byte of our 4 byte integer "msg_len" located after the "usn" buffer
+
+-> in "set_msg", a buffer of 1024 bytes is used to get the message from stdin, and then it is copied with a call to strncpy into our 140-byte "msg" buffer. The third parameter of strncpy, which indicated the number of bytes to copy, is the "msg_len" integer
+
+-> therefore if we modify the first byte of "msg_len" and make sure "msg_len" is superior or equal to 208 (0xd0), we can overflow into "handle_msg"'s return address when the call to strncpy in "set_msg" is made. We do this by writing at msg[200]
+
+-> we will overwrite the return address of "handle_msg" with the address of function "secret_backdoor", which calls system with a buffer of our choice
+
+-> the address of "secret_backdoor" is 0x000055555555488c
+
+> (python -c "print('-' * 40 + '\xd0')"; python -c "print('-' * 200 + '\x8c\x48\x55\x55\x55\x55\x00\x00')"; cat) | ./level09
+> cat /home/users/end/.pass
+j4AunAPDXaJxxWjYEUxpanmvSgRDV3tpA5BEaBuE
