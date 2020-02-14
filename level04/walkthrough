@@ -6,7 +6,7 @@ solution level04:
 	- set the process as traceable by its parent
 	- gets(buff) -> there is a 128 byte buffer on the stack
 - if process is the parent :
-	- trace the system calls of the parent, execute them as long as no execve call is made (and return if the child process is terminated)
+	- trace the system calls of the child, execute them as long as no execve call is made (and return if the child process is terminated)
 	- in case a call to execve was made, terminate all processes (belonging to same GID)
 
 
