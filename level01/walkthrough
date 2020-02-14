@@ -2,7 +2,7 @@ solution level01:
 
 -> we use gdb to inspect the stack and the code
 
--> main pushes 2 registers on the stack, and then add 96 bytes
+-> main pushes 2 registers on the stack, and then adds 96 bytes
 
 -> there is a buffer of 64 bytes at [esp+0x1c] (+28) and an int at [esp+0x5c] (+92)
 
