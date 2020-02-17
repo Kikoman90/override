@@ -35,7 +35,7 @@ void	set_username(struct msn *m)
 	printf(">>: ");
 	fgets(usn, 128, stdin);
 	i = 0;
-	while (i > 40 && usn[i])
+	while (i <= 40 && usn[i])
 	{
 		m->usn[i] = usn[i];
 		i++;
