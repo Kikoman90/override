@@ -27,7 +27,7 @@ solution level07:
 
 -> the address of system is 0xf7e6aed0 (4159090384) and the address of "/bin/sh" is 0xf7f897ec (4160264172)
 
--> we are prevented from writing at index 114 but we can bypass the modulo by 3 condition by setting the high order bit of the index to 1. This bit will be discarded because the index is right shifted once. Therefore writing at index 2147483762 is equivalent to writing at index 114.
+-> we are prevented from writing at index 114 but we can bypass the modulo by 3 condition by setting the high order bit of the index to 1. This bit will be discarded because the index is left shifted twice (multiplied by 4 before indexing because we are working with an array of integers). Therefore writing at index 2147483762 is equivalent to writing at index 114.
 
 > ./level07
 > Input command: store
