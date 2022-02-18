@@ -11,6 +11,7 @@ int	main(void)
 {
 	char	buff[128] = {0};
 	int	wstatus = 0;
+	pid_t	pid;
 
 	if ((pid = fork()) == 0)
 	{
