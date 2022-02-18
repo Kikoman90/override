@@ -13,14 +13,14 @@ int	main(void)
 	int	wstatus = 0;
 	pid_t	pid;
 
-	if ((pid = fork()) == 0)
+	if ((pid = fork()) == 0) // child process
 	{
 		prctl(PR_SET_PDEATHSIG, SIGHUP); // set parent-death signal to SIGHUP
-		ptrace(PTRACE_TRACEME, 0, NULL, NULL); // PTRACE_TRACEME = 0
+		ptrace(PTRACE_TRACEME, 0, NULL, NULL);
 		puts("Give me some shellcode, k");
 		gets(buff);
 	}
-	else
+	else // parent process
 	{
 		do
 		{
@@ -31,9 +31,9 @@ int	main(void)
 				return (0);
 			}
 		}
-		while (ptrace(PTRACE_PEEKUSER, pid, ORIG_EAX, NULL) != 11); // PTRACE_PEEKUSER = 3
+		while (ptrace(PTRACE_PEEKUSER, pid, ORIG_EAX, NULL) != 11); // as long as no execve call is made
 		puts("no exec() for you");
-		kill(pid, SIGKILL); // kills all processes belonging to the same groud (GID)
+		kill(pid, SIGKILL); // kill the child (｀∀´)Ψ
 	}
 	return (0);
 }
