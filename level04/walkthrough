@@ -7,7 +7,7 @@ solution level04:
 	- gets(buff) -> there is a 128 byte buffer on the stack
 - if process is the parent :
 	- trace the system calls of the child, execute them as long as no execve call is made (and return if the child process is terminated)
-	- in case a call to execve was made, terminate all processes (belonging to same GID)
+	- in case a call to execve was made, kill the child process
 
 
 => we can inject some shellcode in our buffer, and of course overflow the return address (saved eip)
