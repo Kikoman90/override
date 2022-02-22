@@ -31,7 +31,7 @@ int	main(void)
 				return (0);
 			}
 		}
-		while (ptrace(PTRACE_PEEKUSER, pid, ORIG_EAX, NULL) != 11); // as long as no execve call is made
+		while (ptrace(PTRACE_PEEKUSER, pid, ORIG_EAX * 4, NULL) != 11); // as long as no execve call is made
 		puts("no exec() for you");
 		kill(pid, SIGKILL); // kill the child (｀∀´)Ψ
 	}
